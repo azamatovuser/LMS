@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  django:
+    build: .
+    container_name: django
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app/src/
+    ports:
+      - 8000:8000
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=django-insecure-28-6c9ec@g*au3x+spa_ml&306ss+q8e1pz+*(bwl^3@pu61#9
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - DB_NAME=lmsdb
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_HOST=db
+      - DB_PORT=5432
+    depends_on:
+      - db
+  
+  celery:
+    build: .
+    command: celery -A celery worker
+    volumes:
+      - .:/app/src/
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    depends_on:
+      - django
+      - redis
+  
+  db:
+    image: postgres
+    container_name: db
+    environment:
+      - POSTGRES_DB=lmsdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    
+  redis:
+    image: redis:alpine
+    hostname: redis
+    ports:
+      - "6379:6379"
