@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'psycopg2',
+
     'apps.account'
 ]
 
@@ -131,3 +132,5 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL')
+
+AUTH_USER_MODEL = 'account.Account'

@@ -6,32 +6,32 @@ services:
     container_name: django
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/app/src/
+      - ./src:/app:rw
     ports:
       - 8000:8000
     environment:
-      - DEBUG=1
-      - SECRET_KEY=django-insecure-28-6c9ec@g*au3x+spa_ml&306ss+q8e1pz+*(bwl^3@pu61#9
-      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - DB_NAME=lmsdb
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres
-      - DB_HOST=db
-      - DB_PORT=5432
+      - DEBUG=${DEBUG}
+      - SECRET_KEY=${SECRET_KEY}
+      - DJANGO_ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS}
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
     depends_on:
       - db
 
   fastapi:
     build: .
     container_name: fastapi
-    command: uvicorn api.main:app --host 0.0.0.0 --port 8001
+    command: uvicorn api.main:app --host 0.0.0.0 --port 8001 --reload
     ports:
       - 8001:8001
     volumes:
-      - .:/app/src/
+      - ./src:/app:rw
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/lmsdb
+      - DATABASE_URL=${DATABASE_URL}
     depends_on:
       - db
     
@@ -40,9 +40,9 @@ services:
     build: .
     command: celery -A celery worker
     volumes:
-      - .:/app/src/
+      - ./src:/app:rw
     environment:
-      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
     depends_on:
       - django
       - redis
@@ -51,12 +51,17 @@ services:
     image: postgres
     container_name: db
     environment:
-      - POSTGRES_DB=lmsdb
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     
   redis:
     image: redis:alpine
     hostname: redis
     ports:
       - "6379:6379"
+
+volumes:
+  postgres_data:

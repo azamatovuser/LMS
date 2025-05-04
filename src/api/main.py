@@ -1,8 +1,11 @@
 from fastapi import FastAPI
-from database import SessionLocal, Base, engine
-from logger import logger
+from api.database import Base, engine
+from api.logger import logger
+from api.routers.account import router as account_router
 
 app = FastAPI()
+
+app.include_router(account_router, prefix="/api/account", tags=["Account"])
 
 @app.on_event("startup")
 def startup():
@@ -14,10 +17,3 @@ def startup():
 def shutdown():
     logger.info("Shutting down, database engine disposed.")
     engine.dispose()
-    
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
