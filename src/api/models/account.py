@@ -44,3 +44,11 @@ class AccountRequest(BaseModel):
     email: str = Field(min_length=3)
     password: str = Field(min_length=6)
     confirm_password: str = Field(min_length=6)
+
+class LoginRequest(BaseModel):
+    phone_number: str
+    password: str
+
+class CodeVerification(BaseModel):
+    phone_number: str
+    code: str

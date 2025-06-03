@@ -4,12 +4,8 @@ class Account:
     def __init__(self, db):
         self.db = db
 
-    def get_account(self, username: str):
-        account = self.db.query(AccountDB).filter(username==AccountDB.username).first()
-        return account
-    
-    def get_all_accounts(self):
-        print(self.db.query(AccountDB).all())
+    def get_account_by_phone(self, phone_number):
+        return self.db.query(AccountDB).filter(AccountDB.phone_number == phone_number).first()
 
     def register(self, account_request, password):
         new_account = AccountDB(
