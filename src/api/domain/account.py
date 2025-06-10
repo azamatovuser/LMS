@@ -104,7 +104,6 @@ class Account:
         if self.token is None:
             self.authenticate()
 
-        # Sanitize phone number: remove +998 or 998
         phone = phone.strip().replace("+998", "").replace("998", "")
         if not phone.isdigit() or len(phone) != 9:
             raise ValueError("Phone number must be in +998XXXXXXXXX or 998XXXXXXXXX format")
@@ -124,7 +123,6 @@ class Account:
             headers["Authorization"] = f"Bearer {self.token}"
             response = requests.post(f"{os.getenv("ESKIZ_BASE_URL")}/message/sms/send", headers=headers, data=data)
 
-        # Optional: print Eskiz response for debugging
         if response.status_code != 200:
             print("Eskiz response:", response.text)
 

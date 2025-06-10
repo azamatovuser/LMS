@@ -14,8 +14,11 @@ class Status(models.TextChoices):
 class Account(AbstractUser):
     role = models.CharField(max_length=10, choices=Role, default=Role.STUDENT)
     status = models.CharField(max_length=10, choices=Status, default=Status.FREE)
-    phone_number = models.CharField(max_length=15, blank=True, null=True)
+    phone_number = models.CharField(max_length=15, blank=True, null=True, unique=True)
     created_date = models.DateTimeField(auto_now_add=True)
 
+    USERNAME_FIELD = 'phone_number'
+    REQUIRED_FIELDS = [phone_number]
+
     def __str__(self):
-        return self.username
+        return self.phone_number

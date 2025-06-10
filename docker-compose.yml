@@ -11,7 +11,7 @@ services:
       - 8000:8000
     environment:
       - DEBUG=${DEBUG}
-      - SECRET_KEY=${SECRET_KEY}
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
       - DJANGO_ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS}
       - CELERY_BROKER_URL=${CELERY_BROKER_URL}
       - DB_NAME=${DB_NAME}
@@ -32,6 +32,11 @@ services:
       - ./src:/app:rw
     environment:
       - DATABASE_URL=${DATABASE_URL}
+      - ESKIZ_BASE_URL=${ESKIZ_BASE_URL}
+      - ESKIZ_EMAIL=${ESKIZ_EMAIL}
+      - ESKIZ_PASSWORD=${ESKIZ_PASSWORD}
+      - SECRET_KEY=${SECRET_KEY}
+      - ALGORITHM=${ALGORITHM}
     depends_on:
       - db
     
