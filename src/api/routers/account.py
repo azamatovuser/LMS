@@ -2,17 +2,17 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from api.database import get_db
 from api.models.account import Token
-from api.domain.account import Account as AccountDomain
+from api.domain.account import User as UserDomain
 from api.models.account import AccountRequest, LoginRequest, CodeVerification
 import os
 
 router = APIRouter(
-    tags=['Account']
+    tags=['User']
 )
 
 @router.post("/login")
 async def login(form_data: LoginRequest, db: Session = Depends(get_db)):
-    domain = AccountDomain(db)
+    domain = UserDomain(db)
     code = domain.generate_code()
     print(code)
     domain.store_code(form_data.phone_number, code)
@@ -23,13 +23,13 @@ async def login(form_data: LoginRequest, db: Session = Depends(get_db)):
 
 @router.post("/register")
 async def register(account_request: AccountRequest, db: Session = Depends(get_db)):
-    domain = AccountDomain(db)
+    domain = UserDomain(db)
     return domain.register(account_request)
 
 
 @router.post("/verify-code")
 async def verify_code(form_data: CodeVerification, db: Session = Depends(get_db)):
-    domain = AccountDomain(db)
+    domain = UserDomain(db)
     code = domain.get_code(form_data.phone_number)
     if not code:
         raise HTTPException(status_code=404, detail="Code expired or not sent")

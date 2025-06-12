@@ -1,6 +1,6 @@
 from passlib.context import CryptContext
 from datetime import timedelta, datetime, timezone
-from api.crud.account import Account as AccountCrud
+from api.crud.account import User as UserCrud
 from fastapi import HTTPException, status
 from passlib.hash import django_pbkdf2_sha256
 import os
@@ -18,9 +18,9 @@ pwd_context = CryptContext(
     deprecated="auto"
 )
 
-class Account:
+class User:
     def __init__(self, db):
-        self.crud = AccountCrud(db)
+        self.crud = UserCrud(db)
         self.token = None
 
     def login(self, form_data):

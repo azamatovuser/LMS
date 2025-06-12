@@ -5,7 +5,7 @@ from api.routers.account import router as account_router
 
 app = FastAPI()
 
-app.include_router(account_router, prefix="/api/account", tags=["Account"])
+app.include_router(account_router, prefix="/api/user", tags=["User"])
 
 @app.on_event("startup")
 def startup():

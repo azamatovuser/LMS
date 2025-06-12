@@ -1,12 +1,12 @@
 from rest_framework import serializers
-from apps.account.models import Account
+from apps.account.models import User
 
-class AccountRegisterSerializer(serializers.ModelSerializer):
+class UserRegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     password2 = serializers.CharField(write_only=True)
 
     class Meta:
-        model = Account
+        model = User
         fields = ('phone_number', 'password', 'password2')
 
     def validate(self, attrs):
@@ -16,5 +16,5 @@ class AccountRegisterSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         validated_data.pop('password2')
-        account = Account.objects.create(**validated_data)
-        return account
+        user = User.objects.create(**validated_data)
+        return user

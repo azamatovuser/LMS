@@ -8,28 +8,30 @@ class TimeStamp(models.Model):
     class Meta:
         abstract = True
 
+class LocalizationItem(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField(blank=True, null=True)
+    language_type = models.CharField(max_length=50)
+
+    class Meta:
+        abstract = True
+
 class Quiz(TimeStamp):
     lesson_id = models.ForeignKey(Lesson, on_delete=models.CASCADE)
     module_id = models.ForeignKey(Module, on_delete=models.CASCADE)
 
-class QuizLocalizationItem(models.Model):
+class QuizLocalizationItem(LocalizationItem):
     quiz_id = models.ForeignKey(Quiz, on_delete=models.CASCADE)
-    title = models.CharField(max_length=100)
-    language_type = models.CharField(max_length=50)
 
 class Question(TimeStamp):
     quiz_id = models.ForeignKey(Quiz, on_delete=models.CASCADE)
 
-class QuestionLocalizationItem(models.Model):
+class QuestionLocalizationItem(LocalizationItem):
     question_id = models.ForeignKey(Question, on_delete=models.CASCADE)
-    title = models.CharField(max_length=100)
-    language_type = models.CharField(max_length=50)
 
 class Option(TimeStamp):
     question_id = models.ForeignKey(Question, on_delete=models.CASCADE)
     is_correct = models.BooleanField(default=False)
 
-class OptionLocalizationItem(models.Model):
+class OptionLocalizationItem(LocalizationItem):
     option_id = models.ForeignKey(Option, on_delete=models.CASCADE)
-    title = models.CharField(max_length=100)
-    language_type = models.CharField(max_length=50)

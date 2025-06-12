@@ -1,9 +1,10 @@
-from sqlalchemy import Column, Integer, String, func, DateTime, Boolean, Enum
+from sqlalchemy import Column, Integer, String, func, DateTime, Boolean, Enum, ForeignKey
 from sqlalchemy.orm import relationship
 from pydantic import BaseModel, Field
 from api.database import Base
 from sqlalchemy import Enum as SqlEnum
 from enum import Enum
+from datetime import datetime
 
 class Status(str, Enum):
     free = 'free'
@@ -13,23 +14,36 @@ class Role(str, Enum):
     admin = 'admin'
     student = 'student'
 
-class Account(Base):
-    __tablename__ = "account_account"
+class SubscriptionType(str, Enum):
+    free = "free"
+    premium = "premium"
+
+class User(Base):
+    __tablename__ = "account_user"
 
     id = Column(Integer, primary_key=True, index=True)
-    status = Column(SqlEnum(Status, name="status_enum"), nullable=False, default=Status.free)
     role = Column(SqlEnum(Role, name="role_enum"), nullable=False, default=Role.student)
-    first_name = Column(String, nullable=False)
-    last_name = Column(String, nullable=False)
     phone_number = Column(String, nullable=False)
-    username = Column(String, unique=True)
-    email = Column(String, nullable=False)
     password = Column(String)
     is_active = Column(Boolean, default=True)
     is_staff = Column(Boolean, default=False)
     is_superuser = Column(Boolean, default=False)
-    date_joined = Column(DateTime, default=func.now())
     created_date = Column(DateTime, default=func.now())
+
+    subscription = relationship("Subscription", back_populates="user", uselist=False)
+
+class Subscription(Base):
+    __tablename__ = "account_subscription"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("account_user.id"), unique=True)
+    type = Column(SqlEnum(SubscriptionType, name="subscription_type_enum"), nullable=False, default=SubscriptionType.free)
+    start_date = Column(DateTime, default=func.now())
+    end_date = Column(DateTime, nullable=True)
+    is_active = Column(Boolean, default=True)
+    created_date = Column(DateTime, default=func.now())
+
+    user = relationship("User", back_populates="subscription")
 
 class Token(BaseModel):
     access_token: str

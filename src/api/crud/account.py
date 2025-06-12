@@ -1,14 +1,14 @@
-from api.models.account import Account as AccountDB
+from api.models.account import User as UserDB
 
-class Account:
+class User:
     def __init__(self, db):
         self.db = db
 
     def get_account_by_phone(self, phone_number):
-        return self.db.query(AccountDB).filter(AccountDB.phone_number == phone_number).first()
+        return self.db.query(UserDB).filter(UserDB.phone_number == phone_number).first()
 
     def register(self, account_request, password):
-        new_account = AccountDB(
+        new_account = UserDB(
             username=account_request.username,
             first_name=account_request.first_name,
             last_name=account_request.last_name,
