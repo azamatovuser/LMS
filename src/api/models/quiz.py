@@ -12,7 +12,7 @@ class LocalizationBaseMixin:
     language_type = Column(String(50))
 
 class Quiz(Base, TimeStampMixin):
-    __tablename__ = 'quizzes'
+    __tablename__ = 'quiz_quiz'
 
     id = Column(Integer, primary_key=True, index=True)
     lesson_id = Column(Integer, ForeignKey('lessons.id'))
@@ -22,14 +22,14 @@ class Quiz(Base, TimeStampMixin):
     questions = relationship("Question", back_populates="quiz", cascade="all, delete-orphan")
 
 class QuizLocalizationItem(Base, LocalizationBaseMixin):
-    __tablename__ = 'quiz_localization_items'
+    __tablename__ = 'quiz_quizlocalizationitem'
 
     id = Column(Integer, primary_key=True, index=True)
     quiz_id = Column(Integer, ForeignKey('quizzes.id'))
     quiz = relationship("Quiz", back_populates="quiz_localization")
 
 class Question(Base, TimeStampMixin):
-    __tablename__ = 'questions'
+    __tablename__ = 'quiz_question'
 
     id = Column(Integer, primary_key=True, index=True)
     quiz_id = Column(Integer, ForeignKey('quizzes.id'))
@@ -38,14 +38,14 @@ class Question(Base, TimeStampMixin):
     options = relationship("Option", back_populates="question", cascade="all, delete-orphan")
 
 class QuestionLocalizationItem(Base, LocalizationBaseMixin):
-    __tablename__ = 'question_localization_items'
+    __tablename__ = 'quiz_questionlocalizationitem'
 
     id = Column(Integer, primary_key=True, index=True)
     question_id = Column(Integer, ForeignKey('questions.id'))
     question = relationship("Question", back_populates="question_localization")
 
 class Option(Base, TimeStampMixin):
-    __tablename__ = 'options'
+    __tablename__ = 'quiz_option'
 
     id = Column(Integer, primary_key=True, index=True)
     question_id = Column(Integer, ForeignKey('questions.id'))
@@ -54,7 +54,7 @@ class Option(Base, TimeStampMixin):
     option_localization = relationship("OptionLocalizationItem", back_populates="option", cascade="all, delete-orphan")
 
 class OptionLocalizationItem(Base, LocalizationBaseMixin):
-    __tablename__ = 'option_localization_items'
+    __tablename__ = 'quiz_optionlocalizationitem'
 
     id = Column(Integer, primary_key=True, index=True)
     option_id = Column(Integer, ForeignKey('options.id'))

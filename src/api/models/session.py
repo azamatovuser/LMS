@@ -13,14 +13,14 @@ class TimeStampMixin:
     created_date = Column(DateTime, default=func.now())
 
 class UserCourseSession(Base, TimeStampMixin):
-    __tablename__ = 'user_course_sessions'
+    __tablename__ = 'session_usercoursesession'
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('account_account.id'))
     course_id = Column(Integer, ForeignKey('courses.id'))
 
 class UserModuleSession(Base, TimeStampMixin):
-    __tablename__ = 'user_module_sessions'
+    __tablename__ = 'session_usermodulesession'
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('account_account.id'))
@@ -28,14 +28,14 @@ class UserModuleSession(Base, TimeStampMixin):
     score = Column(Float)
 
 class UserLessonSession(Base, TimeStampMixin):
-    __tablename__ = 'user_lesson_sessions'
+    __tablename__ = 'session_userlessonsession'
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('account_account.id'))
     lesson_id = Column(Integer, ForeignKey('lessons.id'))
 
 class UserAnswerSession(Base, TimeStampMixin):
-    __tablename__ = 'user_answer_sessions'
+    __tablename__ = 'session_useranswersession'
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('account_account.id'))
@@ -44,7 +44,7 @@ class UserAnswerSession(Base, TimeStampMixin):
     not_correct = Column(Integer)
 
 class Answer(Base, TimeStampMixin):
-    __tablename__ = 'answers'
+    __tablename__ = 'session_answer'
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('account_account.id'))

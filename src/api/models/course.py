@@ -14,21 +14,21 @@ class LocalizationBaseMixin:
     language_type = Column(String(50))
 
 class Course(Base, TimeStampMixin):
-    __tablename__ = 'courses'
+    __tablename__ = 'course_course'
 
     id = Column(Integer, primary_key=True, index=True)
     course_localization = relationship("CourseLocalizationItem", back_populates="course", cascade="all, delete-orphan")
     modules = relationship("Module", back_populates="course")
 
 class CourseLocalizationItem(Base, LocalizationBaseMixin):
-    __tablename__ = 'course_localization_items'
+    __tablename__ = 'course_courselocalizationitem'
 
     id = Column(Integer, primary_key=True, index=True)
     course_id = Column(Integer, ForeignKey('courses.id'))
     course = relationship("Course", back_populates="course_localization")
 
 class Module(Base, TimeStampMixin):
-    __tablename__ = 'modules'
+    __tablename__ = 'course_module'
 
     id = Column(Integer, primary_key=True, index=True)
     course_id = Column(Integer, ForeignKey('courses.id'), nullable=True)
@@ -37,14 +37,14 @@ class Module(Base, TimeStampMixin):
     lessons = relationship("Lesson", back_populates="module")
 
 class ModuleLocalizationItem(Base, LocalizationBaseMixin):
-    __tablename__ = 'module_localization_items'
+    __tablename__ = 'course_modulelocalizationitem'
 
     id = Column(Integer, primary_key=True, index=True)
     module_id = Column(Integer, ForeignKey('modules.id'))
     module = relationship("Module", back_populates="module_localization")
 
 class Lesson(Base, TimeStampMixin):
-    __tablename__ = 'lessons'
+    __tablename__ = 'course_lesson'
 
     id = Column(Integer, primary_key=True, index=True)
     module_id = Column(Integer, ForeignKey('modules.id'), nullable=True)
@@ -52,7 +52,7 @@ class Lesson(Base, TimeStampMixin):
     lesson_localization = relationship("LessonLocalizationItem", back_populates="lesson", cascade="all, delete-orphan")
 
 class LessonLocalizationItem(Base, LocalizationBaseMixin):
-    __tablename__ = 'lesson_localization_items'
+    __tablename__ = 'course_lessonlocalizationitem'
 
     id = Column(Integer, primary_key=True, index=True)
     lesson_id = Column(Integer, ForeignKey('lessons.id'))
